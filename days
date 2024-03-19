@@ -1,0 +1,34 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Generate date range for the last 30 days
+end_date = pd.Timestamp.today()
+start_date = end_date - pd.Timedelta(days=29)
+date_range = pd.date_range(start=start_date, end=end_date, freq='D')
+
+# Create a DataFrame with random prices for each retailer
+np.random.seed(42)
+data = pd.DataFrame({
+    'Date': date_range,
+    'Retailer A': np.random.randint(60, 81, size=len(date_range)),
+    'Retailer B': np.random.randint(70, 91, size=len(date_range)),
+    'Retailer C': np.random.randint(80, 101, size=len(date_range))
+})
+
+# Set the prices for the last 7 days to the specified values
+data.loc[-7:, 'Retailer A'] = 70
+data.loc[-7:, 'Retailer B'] = 80
+data.loc[-7:, 'Retailer C'] = 90
+
+# Plot the time-series
+plt.figure(figsize=(10, 6))
+for retailer in ['Retailer A', 'Retailer B', 'Retailer C']:
+    plt.plot(data['Date'], data[retailer], label=retailer)
+
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title('Product Price Time-Series for Different Retailers')
+plt.legend()
+plt.grid(True)
+plt.show()
